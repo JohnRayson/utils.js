@@ -24,30 +24,30 @@ Inside the utils.ready() you will have access to all entire utlis.js features, a
 
 Features:
 * utils.createUUID() 
-..*returns a UUID
+  *returns a UUID
 
 * utils.set(string:key, object:value, bool:fixed) 
-..*adds a variable to the utils.vars object and controls whether it can be changed
+  *adds a variable to the utils.vars object and controls whether it can be changed
 
 * utils.get(string:key, bool:info) 
-..*gets a value from the utils.vars object info returns the settign s as well as the value
+  *gets a value from the utils.vars object info returns the settign s as well as the value
 
 * utils.localStorage(string:appId, bool:persist) 
-..*returns a refernce to either localStorage || sessionStorage that has associated functions for managing data
+  *returns a refernce to either localStorage || sessionStorage that has associated functions for managing data
 
 * utils.alert(string:message) 
-..*jQueryUI alert box (requires you to include jQueryUI CSS - of your choice)
+  *jQueryUI alert box (requires you to include jQueryUI CSS - of your choice)
 
 * utils.userChoice(string:title, string:message, object:options) 
-..*jQueryUI dialog wrapper
+  *jQueryUI dialog wrapper
 
 * utils.setAjaxOptions(object:options) 
-..*sets global ajax options to avoid passing the same information into each calling
+  *sets global ajax options to avoid passing the same information into each calling
 
 * utils.ajax(object:options) 
-..*calls $.ajax using global ajax options extended with what ever you pass in
+  *calls $.ajax using global ajax options extended with what ever you pass in
 
 * utils.await(array:calls, function:complete)
-..*calls a function after a number of ajax calls have all completed
+  *calls a function after a number of ajax calls have all completed
 
 
