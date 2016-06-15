@@ -5,7 +5,7 @@ var utils = utils || {};
 // add the no-close style (this hides the close icon on dialogs - jQuery UI recommended way of doing it. http://api.jqueryui.com/dialog/
 var head = document.getElementsByTagName('head')[0];
 var styles = document.createElement("style");
-styles.innerHTML = ".no-close .ui-dialog-titlebar-close { display: none; } "
+styles.innerHTML = ".utils-no-close .ui-dialog-titlebar-close { display: none; } "
                  + ".utils-centre { text-align: center !important; margin-left: auto !important; margin-right: auto !important; }"
                  + ".utils-plain-list { list-style-type:none; padding: 0px; }"
 ; // on this line so its easy to add new ones without accidentally screwing it up
@@ -206,7 +206,7 @@ utils.initilize = function ()
                  + "<div style='overflow: hidden; max-height: " + viewportHeight / 2 + "px; max-width: " + viewportWidth / 2 + "px;'>" + message + "</div>"
                  + "</div>";
 
-        var defaults = { dialogClass: "no-close", modal: true, closeOnEscape: false, autoOpen: true, buttons: { "Close": function () { $(this).empty().remove(); }}};
+        var defaults = { dialogClass: "utils-no-close", modal: true, closeOnEscape: false, autoOpen: true, buttons: { "Close": function () { $(this).empty().remove(); }}};
         var settings = $.extend({},defaults, options);
 
         $(html).dialog(settings);
@@ -258,7 +258,7 @@ utils.initilize = function ()
             url: settings.baseURL + settings.path,
             type: settings.type,
             contentType: settings.contentType,
-            data: JSON.stringify(settings.data), // otherwise jQuery sends it as Form encoded
+            data: (settings.contentType=="application/x-www-form-urlencoded" ? settings.data : JSON.stringify(settings.data)), // otherwise jQuery sends it as Form encoded regardless of the contentType
             beforeSend: settings.beforeSend,
             success: function (data) { utils.parseAjaxReply(data, settings.success); },
             error: function (data) { utils.parseAjaxReply(data, settings.error); }

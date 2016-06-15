@@ -25,7 +25,7 @@ Inside the utils.ready() you will have access to all entire utlis.js features, a
 Features:
 ```javascript
 utils.createUUID() 
-returns a UUID
+//returns a UUID
 
 utils.set(string:key, object:value, bool:fixed) 
 //adds a variable to the utils.vars object and controls whether it can be changed
