@@ -1,5 +1,25 @@
 ﻿$(document).ready(function ()
 {
+    // highlight the code
+    $('pre code').each(function (i, block)
+    {
+        hljs.highlightBlock(block);
+    });
+
+    $(".selector-code-collapse button").bs_button().click(function ()
+    {
+        var $pre = $(this).parent().find("pre");
+        if ($pre.data("shown"))
+        {
+            $pre.data("shown", false);
+            $pre.slideUp("fast")
+        }
+        else
+        {
+            $pre.data("shown", true);
+            $pre.slideDown("fast")
+        }
+    });
 
     $("#container-1 nav").bs_navbar(
     {
@@ -76,7 +96,7 @@
     });
 
 
-    $("#container-3 button").bs_button().click(function ()
+    $("#container-3 button:first").bs_button().click(function ()
     {
         $("#switcher").bs_switcher("next");
     });
@@ -86,4 +106,15 @@
     $("#container-4 .number").labeledInput({ label: "Number input", placeholder: "Number field", inputtype: "number" });
     $("#container-4 .password").labeledInput({ label: "Password input", placeholder: "Password field", inputtype: "password", labelposition: "right", labelcss: { textAlign: "left" } });
 
+    $("#container-5 button").bs_button().click(function ()
+    {
+        $("#container-5 div").bs_progress("update", $(this).data("value"));
+    });
+
+    $("#container-5 div.percentage").bs_progress({ valuenow: 50 });
+    $("#container-5 div.number").bs_progress({ valuenow: 75, valuemin: 25, valuemax: 80 });
+
+    $("#container-6 div:first").bs_breadcrumb({
+        trail: [ { text: "Home", link: "#" }, { text: "Library", link: "https://google.co.uk" }, { text: "Data" }]
+    });
 });

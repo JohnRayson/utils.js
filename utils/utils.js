@@ -4,6 +4,7 @@ var styles = document.createElement("style");
 styles.innerHTML = ".no-close .ui-dialog-titlebar-close { display: none; } "
                  + ".utils-centre { text-align: center !important; margin-left: auto !important; margin-right: auto !important; }"
                  + ".utils-plain-list { list-style-type:none; padding: 0px; }"
+                 + ".utils-link { cursor: pointer; }"
 ; // on this line so its easy to add new ones without accidentally screwing it up
 head.appendChild(styles);
 

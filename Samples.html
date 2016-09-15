@@ -2,42 +2,191 @@
 <html>
 	<title>SCADA Client Tools</title>
 
-	<link href='bootstrap/bootstrap.min.css' rel='stylesheet' />
-
 	<script src='jquery/jquery-3.1.0.min.js' ></script>
 	<script src='jquery/jquery-ui.min.js' ></script>
+
 	<script src='bootstrap/bootstrap.min.js' ></script>
+    <link href='bootstrap/bootstrap.min.css' rel='stylesheet' />
+
     <script src='utils/utils.js'></script>
 	<script src='utils/utils-ui.js' ></script>
-    
+
+    <script src='highlight/highlight.min.js'></script>
+    <link href='highlight/default.min.css' rel='stylesheet' />
+
     <style>
-        .section { width: 600px; margin-top: 10px; }
+        .wrapper { margin-bottom: 10px; }
     </style>
 
     <script src="Samples.js"></script>
 <head>
 </head>
 <body>
-	<div class="container section" id="container-1" >
-		<nav></nav>
-		<div id="output-1" class="container">&nbsp;</div>
-	</div>
-	<div class="container section" id="container-2" >
-		<nav></nav>
-		<div id="output-2" class="container">&nbsp;</div>
-	</div>
-    <div class="container section" id="container-3" >
+    <div class="container wrapper" id="container-1">
+        <h3>Basic Navbar</h3>
+        <p>Simple dropdown</p>
+        <nav></nav>
+        <div id="output-1" class="container">&nbsp;</div>
+        <div class="selector-code-collapse">
+            <button>Toggle Code Display</button>
+<pre style="display: none;"><code class="javascript">$("#container-1 nav").bs_navbar(
+{
+    label: "Section 1",
+    groups: [
+        {
+            position: "right",
+            elements: [
+                $("&lt;li /&gt;").bs_dropdown(
+                {
+                    title: "Menu 1",
+                    callback: function (data)
+                    {
+                        $("#output-1").html(data + ": Dropdown");
+                    },
+                    elements: [
+                        { text: "1st", data: "-1st- is just dull" },
+                        { text: "2nd", data: "Gorganzola is the best" },
+                        { text: "3rd", data: "Sausages are great" },
+                        { prior: "seperator", text: "1st after divider", data: "1st-after-divider" }
+                    ]
+                })
+            ]
+        }
+    ]
+});
+</code></pre>
+        </div>
+    </div>
+    <div class="container wrapper" id="container-2">
+        <h3>Advanced Navbar</h3>
+        <p>Including links, left and right aligned content</p>
+        <nav></nav>
+        <div id="output-2" class="container">&nbsp;</div>
+        <div class="selector-code-collapse">
+            <button>Toggle Code Display</button>
+<pre style="display: none;"><code class="javascript">$("#container-2 nav").bs_navbar(
+{
+    callback: function (data)
+    {
+        $("#output-2").html(data + ": Global");
+    },
+    label: "Section 2",
+    groups: [
+        {
+            callback: function (data)
+            {
+                $("#output-2").html(data + ": Left");
+            },
+            position: "left",
+            elements: [
+                { text: "Link 1", data: "Group1-Link1" },
+                { text: "Link 2", data: "Group1-Link2" },
+                $("&lt;li /&gt;").bs_dropdown(
+                {
+                    title: "Menu 2",
+                    callback: function (data)
+                    {
+                        $("#output-2").html(data + ": Dropdown");
+                    },
+                    elements: [
+                        { text: "1st", data: "-1st-" },
+                        { text: "2nd", data: "Gorganzola" },
+                        { text: "3rd", data: "Sausages" },
+                        { prior: "seperator", text: "1st after divider", data: "1st-after-divider" }
+                    ]
+                })
+            ]
+        },
+        {
+            position: "right",
+            callback: function (data)
+            {
+                $("#output-2").html(data + ": Right");
+            },
+            elements: [
+                { text: "Link 1", data: "Group2-Link1" },
+                { text: "Link 2", data: "Group2-Link2" }
+            ]
+        }
+    ]
+});
+</code></pre>
+            </div>
+        </div>
+    <div class="container wrapper" id="container-3">
+        <h3>Content Switcher</h3>
+        <p>Pre-configured content switches on button click</p>
         <button>Click Me! To change the text below</button>
         <div id="switcher">
             <div>This message will scroll round a pre-configured list, this is item 1</div>
             <div>This is item 2, there is more to come</div>
             <div>This is item 3, its the last one. After this it will go back to the start</div>
         </div>
+        <div class="selector-code-collapse">
+            <button>Toggle Code Display</button>
+<pre style="display: none;"><code class="javascript">$("#container-3 button").bs_button().click(function ()
+{
+    $("#switcher").bs_switcher("next");
+});
+$("#switcher").bs_switcher();
+</code></pre>
+        </div>
     </div>
-    <div class="container section" id="container-4" >
-        <div class="text"></div>
-        <div class="number"></div>
-        <div class="password"></div>
-    </div>
-    
+        <div class="container wrapper" id="container-4">
+            <h3>Labeled Input</h3>
+            <p>Password field is using right aligned label</p>
+            <div class="text"></div>
+            <div class="number"></div>
+            <div class="password"></div>
+            <div class="selector-code-collapse">
+                <button>Toggle Code Display</button>
+<pre style="display: none;"><code class="javascript">$("#container-4 .text").labeledInput({ label: "Text input", placeholder: "Text field" });
+$("#container-4 .number").labeledInput({ label: "Number input", placeholder: "Number field", inputtype: "number" });
+$("#container-4 .password").labeledInput(
+    { 
+        label: "Password input", 
+        placeholder: "Password field", 
+        inputtype: "password", 
+        labelposition: "right",
+        labelcss: { textAlign: "left" } 
+    }
+);
+</code></pre>
+            </div>
+        </div>
+        <div class="container wrapper" id="container-5">
+            <h3>Progressbar</h3>
+            <button data-value="25">Set to 25</button>
+            <button data-value="50">Set to 50</button>
+            <button data-value="75">Set to 75</button>
+            <p>A progress bar for precentages (Range 0 - 100)</p>
+            <div class="percentage"></div>
+            <p>A progress bar for values (Range 25 - 80) NB: Only works for positive numbers</p>
+            <div class="number"></div>
+            <div class="selector-code-collapse">
+                <button>Toggle Code Display</button>
+<pre style="display: none;"><code class="javascript">$("#container-5 button").bs_button().click(function ()
+{
+    $("#container-5 div").bs_progress("update", $(this).data("value"));
+});
+$("#container-5 div.percentage").bs_progress({ valuenow: 50 });
+$("#container-5 div.number").bs_progress({ valuenow: 75, valuemin: 25, valuemax: 80 });
+</code></pre>
+            </div>
+        </div>
+        <div class="container wrapper" id="container-6">
+            <h3>Breadcrumbs</h3>
+            <p>Breadcrumb trail of where the page is</p>
+            <div></div>
+            <div class="selector-code-collapse">
+                <button>Toggle Code Display</button>
+<pre style="display: none;"><code class="javascript">$("#container-6 div:first").bs_breadcrumb({
+    trail: [ { text: "Home", link: "#" }, { text: "Library", link: "https://google.co.uk" }, { text: "Data" }]
+});
+</code></pre>
+            </div>
+        </div>
+        <!-- padding at the bottom -->
+        <div style="height: 50px;"></div>
+
 </body>

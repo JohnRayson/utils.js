@@ -52,11 +52,95 @@
                  
         });
     };
+
+    // extension with methods http://stackoverflow.com/a/1117129/1286358
+    $.fn.extend(
+    {
+        bs_progress: function (options, args)
+        {
+            var defaults = { valuenow: 0, valuemin: 0, valuemax: 100 };
+            if (!options || typeof (options) == 'object')
+            {
+                options = $.extend(true, {}, defaults, options);
+            }
+            return this.each(function ()
+            {
+                new $.bs_progress($(this), options, args);
+            });
+        }
+    });
+    $.bs_progress = function ($el, settings, args)
+    {
+        this.update = function ()
+        {
+            var settings = $el.data("settings");
+
+            if (settings)
+            {
+                var percentageFull = (100 / (settings.valuemax - settings.valuemin)) * (args - settings.valuemin);
+                $el.attr("aria-valuenow", args)
+                $el.find("div").css({ width: percentageFull + "%" })
+                        .find("span").text(args);
+            }
+        }
+
+        if (settings && typeof (settings) == 'string')
+        {
+            if (this[settings])
+                this[settings]();
+
+            return;
+        }
+
+        // otherwise initial setup
+        var percentageFull = (100 / (settings.valuemax - settings.valuemin)) * (settings.valuenow - settings.valuemin);
+
+        $el.addClass("progress")
+            .data("settings", settings)
+            .append($("<div />").addClass("progress-bar")
+                    .attr("role", "progressbar")
+                    .attr("aria-valuenow", settings.valuenow)
+                    .attr("aria-valuemin", settings.valuemin)
+                    .attr("aria-valuemax", settings.valuemax)
+                    .css( { width: percentageFull + "%" })
+                    .append($("<span />").text(settings.valuenow))
+                    );
+    }
 	
+    $.fn.bs_breadcrumb = function (options)
+    {
+        var defaults = { trail: [] }
+        var settings = $.extend(true, {}, defaults, options);
+
+        return this.each(function ()
+        {
+            var $this = $(this);
+
+            var $list = $("<ol />").addClass("breadcrumb");
+            
+            for (var crumb in settings.trail)
+            {
+                if(!settings.trail[crumb].link)
+                    $list.append($("<li />").append(document.createTextNode(settings.trail[crumb].text)));
+                else
+                    $list.append($("<li />")
+                            .append($("<a />")
+                                .attr("href", settings.trail[crumb].link)
+                                    .append(document.createTextNode(settings.trail[crumb].text))
+                                   )
+                        );
+            }
+
+            $list.find("li:last").addClass("active");
+
+            $this.append($list);
+        });
+    }
+
     $.fn.bs_navbar = function (options)
     {
 		var defaults = { groups: [], label: "", callback: function() { console.log("No callback on Navbar"); } }
-		var settings = $.extend({},defaults,options);
+		var settings = $.extend(true,{},defaults,options);
 		
 		return this.each(function()
 		{
@@ -65,20 +149,20 @@
 			var $this = $(this);
 			
 			$this.addClass("navbar navbar-default")
-				 .append($("<div />").addClass("container-fluid"))
-				 .append($("<div />").addClass("navbar-header")
-                    .append($("<button />").addClass("navbar-toggle collapsed")
-                        .attr("type","button")
-                        .attr("aria-expanded","false")
-                        .data("toggle","collapse")
-                        .data("target","#" + id)
-                        .html("<span class='sr-only'>Toggle navigation</span>"
-						    + "			<span class='icon-bar'></span>"
-						    + "			<span class='icon-bar'></span>"
-						    + "			<span class='icon-bar'></span>"))
-                        .append($("<a href='#' />").addClass("navbar-brand")
-                            .append(document.createTextNode(settings.label))))
-				 .append($("<div />").addClass("collapse navbar-collapse").attr("id",id));
+				 .append($("<div />").addClass("container-fluid")
+				    .append($("<div />").addClass("navbar-header")
+                        .append($("<button />").addClass("navbar-toggle collapsed")
+                            .attr("type","button")
+                            .attr("aria-expanded", "false")
+                            .attr("data-target", "#" + id) //.data("target","#" + id)
+                            .attr("data-toggle", "collapse") // .data("toggle","collapse")
+                            .html("<span class='sr-only'>Toggle navigation</span>"
+						        + "			<span class='icon-bar'></span>"
+						        + "			<span class='icon-bar'></span>"
+						        + "			<span class='icon-bar'></span>"))
+                            .append($("<a class='utils-link' />").addClass("navbar-brand")
+                                .append(document.createTextNode(settings.label))))
+				    .append($("<div />").addClass("collapse navbar-collapse").attr("id",id)));
 				 
 			for(var i=0; i < settings.groups.length; i++)
 			{
@@ -100,7 +184,7 @@
 					{
 						$ul.append(group.elements[j] instanceof jQuery?content = group.elements[j]:
 						$("<li />").attr("id",group.elements[j].id || $.utils.createUUID())
-							  .append($("<a href='#'/>").text(group.elements[j].text))
+							  .append($("<a class='utils-link' />").text(group.elements[j].text))
 							  .data("callback",group.elements[j].data)
 						);
 					}
@@ -118,7 +202,9 @@
 		{
 			var $this = $(this);
 			$this.addClass("dropdown");
-			$this.append($("<a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'><span class='caret'></span></a>").text(settings.title));
+			$this.append($("<a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'><span class='caret'></span></a>")
+                .text(settings.title)
+                .append("<span class='caret'></span>"));
 			var $ul = $("<ul />").addClass("dropdown-menu").attr("aria-labelledby","dropdownMenu1")
 				.on("click","li",function()
 				{
@@ -135,13 +221,15 @@
 					
 				var $li = $("<li />").addClass("dropdown-item")
 					.data("callback",settings.elements[i].data)
-					.append($("<a href='#' />").text(settings.elements[i].text));
+					.append($("<a class='utils-link' />").text(settings.elements[i].text));
 
 				$ul.append($li);
 			}
 			$this.append($ul);
 		});
 	}
+
+    // extension with methods http://stackoverflow.com/a/1117129/1286358
 	$.fn.extend(
     {
         bs_button: function (options)
