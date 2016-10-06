@@ -26,7 +26,7 @@ $.utils.vars.get(string:key, bool:info)
 $.utils.localStorage(string:appId, bool:persist) 
 // returns a refernce to either localStorage || sessionStorage that has associated functions for managing data
 
-$.utils.setAjaxOptions(object:options) 
+$.utils.ajaxOptions.set(object:options) 
 // sets global ajax options to avoid passing the same information into each calling
 
 $.utils.ajax(object:options) 

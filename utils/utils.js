@@ -152,11 +152,12 @@ head.appendChild(styles);
             return reply;
         },
         // wrapper to make Ajax calls easy - being as most of the time the settigns will be the same
-        ajaxOptions: { global: true, baseURL: "/", type: "GET", contentType: "application/json", data: "", path: "", beforeSend: function (xhr) { }, success: function (data) { }, error: function (data) { } },
-        setAjaxOptions: function (options)
-        {
-            //  just merge what we pass in with whats already there
-            this.ajaxOptions = $.extend(utils.ajaxOptions, options);
+        ajaxOptions: { global: true, baseURL: "/", type: "GET", contentType: "application/json", data: "", path: "", beforeSend: function (xhr) { }, success: function (data) { }, error: function (data) { },
+            set: function (options)
+            {
+                //  just merge what we pass in with whats already there
+                $.extend(this, options);
+            },
         },
         ajax: function (options)
         {
