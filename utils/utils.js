@@ -156,12 +156,12 @@ head.appendChild(styles);
         setAjaxOptions: function (options)
         {
             //  just merge what we pass in with whats already there
-            utils.ajaxOptions = $.extend(utils.ajaxOptions, options);
+            this.ajaxOptions = $.extend(utils.ajaxOptions, options);
         },
         ajax: function (options)
         {
-            var settings = $.extend({}, utils.ajaxOptions, options);
-
+            var settings = $.extend({}, this.ajaxOptions, options);
+            var that = this;
             $.ajax(
             {
                 global: settings.global,
@@ -170,8 +170,8 @@ head.appendChild(styles);
                 contentType: settings.contentType,
                 data: JSON.stringify(settings.data), // otherwise jQuery sends it as Form encoded
                 beforeSend: settings.beforeSend,
-                success: function (data) { utils.parseAjaxReply(data, settings.success); },
-                error: function (data) { utils.parseAjaxReply(data, settings.error); }
+                success: function (data) { that.parseAjaxReply(data, settings.success); },
+                error: function (data) { that.parseAjaxReply(data, settings.error); }
             });
         },
         parseAjaxReply: function (data, replyFunc)
