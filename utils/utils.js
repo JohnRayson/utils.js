@@ -42,6 +42,29 @@ head.appendChild(styles);
             // Fire the loading
             head.appendChild(external);
         },
+        loadExternals: function (list, callback)
+        {
+            var self = this;
+            var loaded = function (index)
+            {
+                list[index].loaded = true;
+                for (var member in list)
+                {
+                    if (!list[member].loaded)
+                        return false;
+                }
+                callback();
+            }
+
+            for (var member in list)
+            {
+                (function (index)
+                {
+                    self.loadExternal(list[member].url, list[member].type || "script", function () { loaded(index) })
+                })(member);
+            }
+
+        },
         // http://stackoverflow.com/a/8809472
         createUUID: function ()
         {
