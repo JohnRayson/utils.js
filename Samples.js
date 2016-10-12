@@ -114,7 +114,32 @@
     $("#container-5 div.percentage").bs_progress({ valuenow: 50 });
     $("#container-5 div.number").bs_progress({ valuenow: 75, valuemin: 25, valuemax: 80 });
 
-    $("#container-6 div:first").bs_breadcrumb({
+    $("#container-6 .trail").bs_breadcrumb({
         trail: [ { text: "Home", link: "#" }, { text: "Library", link: "https://google.co.uk" }, { text: "Data" }]
+    });
+
+    $("#container-7 table").bs_table(
+    { 
+        titles: ["Firstname","Surname","Shoe size"], 
+        data: [ 
+            ["Joe","Blogs","8"],
+            ["Kate","Doe","6"],
+            ["Fred","Flintstone",null],
+        ], 
+        classes: ["hover", "table-striped"],
+        rowclick: function (colData)
+        {
+            $("#container-7").find(".feedback").text("Clicked row: " + colData);
+        }
+    });
+
+    $("#container-8 .selector-alert").bs_button().click(function ()
+    {
+        $.utils.bs_alert({
+            title: "Title in bold!",
+            msg: "Followed by the message",
+            position: $(this).data("position"),
+            type: $(this).data("type")
+        });
     });
 });
