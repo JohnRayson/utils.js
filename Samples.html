@@ -69,7 +69,7 @@
 
     <!-- utils.js -->
     <div class="container wrapper" id="container-1">
-        <h3>utils.js core functionality</h3>
+        <h3>Core Functionality</h3>
         <div class="well">
             <p>Very brief documentation about whats in utils.js</p>
 <pre style="display: block;"><code class="javascript">$.utils.createUUID() 
@@ -100,17 +100,104 @@ $.utils.await(array:calls, func:complete)
         </div>
     </div>
 
-
-    <!-- Nav bar -->
-
-    <div class="container wrapper" id="container-1">
-        <h3>Basic Navbar</h3>
+    <div class="container wrapper" id="container-2">
+        <h3>Core Functionality</h3>
         <div class="well">
-            <p>Simple dropdown</p>
-            <nav></nav>
-            <div id="output-1" class="container">&nbsp;</div>
-            <div class="selector-code-collapse">
-                <button>Toggle Code Display</button>
+            <p>Create a UUID, internally this is also used with a lot of the UI componants to provide unique identifiers for the elements</p>
+<pre style="display: block;"><code class="javascript">$.utils.createUUID()
+
+for (var i = 0; i < 3; i++) 
+{ 
+    document.write( "//&lt;br /&gt;" + $.utils.createUUID()); 
+}
+<script>for (var i = 0; i < 3; i++) { document.write("<br />//" + $.utils.createUUID()); }</script>
+</code></pre>
+        </div>
+
+        <div class="well">
+            <p>A wrapper to allow standard settings to be used for all ajax calls. This can be set directly but a helper function is supplied to allow easy merging of settings. Subsequent calls can then be made by specifing only the minimum amount of information</p>
+<pre style="display: block;"><code class="javascript">$.utils.ajaxOptions.set(object:options) 
+
+ajaxOptions: { 
+    //
+    global: true,
+    //  primarily for use when calling the same API over numerous calls, 
+    //  eg http://api.something.co.uk/
+    baseURL: "/",                       
+    //  method to call, default is GET
+    type: "GET",
+    //  encoding to use
+    contentType: "application/json",
+    //  data to send with POST requests
+    data: "",
+    //  would normally be specified per call, will be appended to baseURL, 
+    //  eg getData would call url http://api.something.co.uk/getData
+    path: "",
+    //  useful for appending session / authentication keys to each call
+    beforeSend: function (xhr) { },
+    //  called on successful completion, probably not useful as a global
+    success: function (data) { },
+    //  called on error
+    error: function (data) { },
+    //  just merge what we pass in with whats already there
+    set: function (options)
+    {
+        $.extend(this, options);
+    },
+}
+</code></pre>
+        </div>
+
+        <div class="well">
+            <p>Making ajax calls</p>
+<pre style="display: block;"><code class="javascript">$.utils.ajax(object:options)
+
+$.utils.ajax({
+    path: "postSomething",
+    data: { variable1: "sausages" },
+    success: function(data)
+    {
+        // process data
+    }
+});
+</code></pre>
+        </div>
+
+        <div class="well">
+            <p>Making multiple ajax calls, and waiting for them all to complete</p>
+<pre style="display: block;"><code class="javascript">$.utils.await(array:calls, func:complete)
+
+$.utils.await([
+    {
+        path: "getMethod",
+    },
+    {
+        path: "postMethod",
+        data: { variable1: "sausages" },
+    },
+    {
+        path: "postMethod",
+        data: { variable1: "bacon" },
+    }
+    ], function()
+    {
+        // call this when all the calls have returned
+    }
+);
+</code></pre>
+        </div>
+    </div>
+
+        <!-- Nav bar -->
+
+        <div class="container wrapper" id="container-1">
+            <h3>Basic Navbar</h3>
+            <div class="well">
+                <p>Simple dropdown</p>
+                <nav></nav>
+                <div id="output-1" class="container">&nbsp;</div>
+                <div class="selector-code-collapse">
+                    <button>Toggle Code Display</button>
 <pre style="display: none;"><code class="html">&lt;div id="container"&gt;
     &lt;nav&gt;&lt;/nav&gt;
 &lt;/div&gt;
@@ -141,20 +228,20 @@ $.utils.await(array:calls, func:complete)
     ]
 });
 </code></pre>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- advanced navbar -->
+        <!-- advanced navbar -->
 
-    <div class="container wrapper" id="container-2">
-        <h3>Advanced Navbar</h3>
-        <div class="well">
-            <p>Including links, left and right aligned content</p>
-            <nav></nav>
-            <div id="output-2" class="container">&nbsp;</div>
-            <div class="selector-code-collapse">
-                <button>Toggle Code Display</button>
+        <div class="container wrapper" id="container-2">
+            <h3>Advanced Navbar</h3>
+            <div class="well">
+                <p>Including links, left and right aligned content</p>
+                <nav></nav>
+                <div id="output-2" class="container">&nbsp;</div>
+                <div class="selector-code-collapse">
+                    <button>Toggle Code Display</button>
 <pre style="display: none;"><code class="html">&lt;div id="container"&gt;
     &lt;nav&gt;&lt;/nav&gt;
 &lt;/div&gt;
@@ -206,24 +293,24 @@ $.utils.await(array:calls, func:complete)
     ]
 });
 </code></pre>
-            </div>
+                </div>
             </div>
         </div>
 
-    <!-- content switcher  -->
+        <!-- content switcher  -->
 
-    <div class="container wrapper" id="container-3">
-        <h3>Content Switcher</h3>
-        <div class="well">
-            <p>Pre-configured content switches on button click</p>
-            <button>Click Me! To change the text below</button>
-            <div id="switcher">
-                <div>This message will scroll round a pre-configured list, this is item 1</div>
-                <div>This is item 2, there is more to come</div>
-                <div>This is item 3, its the last one. After this it will go back to the start</div>
-            </div>
-            <div class="selector-code-collapse">
-                <button>Toggle Code Display</button>
+        <div class="container wrapper" id="container-3">
+            <h3>Content Switcher</h3>
+            <div class="well">
+                <p>Pre-configured content switches on button click</p>
+                <button>Click Me! To change the text below</button>
+                <div id="switcher">
+                    <div>This message will scroll round a pre-configured list, this is item 1</div>
+                    <div>This is item 2, there is more to come</div>
+                    <div>This is item 3, its the last one. After this it will go back to the start</div>
+                </div>
+                <div class="selector-code-collapse">
+                    <button>Toggle Code Display</button>
 <pre style="display: none;"><code class="html">&lt;div id="container"&gt;
     &lt;button&gt;Click me&lt;/button&gt;
     &lt;div id="switcher"&gt;
@@ -239,19 +326,19 @@ $.utils.await(array:calls, func:complete)
 });
 $("#switcher").bs_switcher();
 </code></pre>
+                </div>
             </div>
-        </div>
 
-    <!-- labeled input -->
+            <!-- labeled input -->
 
-    <div class="container wrapper" id="container-4">
-        <h3>Labeled Input</h3>
-        <p>Password field is using right aligned label</p>
-        <div class="text"></div>
-        <div class="number"></div>
-        <div class="password"></div>
-        <div class="selector-code-collapse">
-            <button>Toggle Code Display</button>
+            <div class="container wrapper" id="container-4">
+                <h3>Labeled Input</h3>
+                <p>Password field is using right aligned label</p>
+                <div class="text"></div>
+                <div class="number"></div>
+                <div class="password"></div>
+                <div class="selector-code-collapse">
+                    <button>Toggle Code Display</button>
 <pre style="display: none;"><code class="html">&lt;div id="container"&gt;
     &lt;div class="text"&gt;&lt;/div&gt;
     &lt;div class="number"&gt;&lt;/div&gt;
@@ -270,25 +357,25 @@ $("#container .password").labeledInput(
     }
 );
 </code></pre>
+                </div>
+            </div>
         </div>
-        </div>
-    </div>
 
-    <!-- progress -->
+        <!-- progress -->
 
-    <div class="container wrapper" id="container-5">
-        <h3>Progressbar</h3>
-        <div class="well">
-            <p>A progress bar for precentages (Range 0 - 100)</p>
-            <div class="percentage"></div>
-            <p>A progress bar for values (Range 25 - 80) NB: Only works for positive numbers</p>
-            <div class="number"></div>
-            <button data-value="25">Set to 25</button>
-            <button data-value="50">Set to 50</button>
-            <button data-value="75">Set to 75</button>
-            <br /><br />
-            <div class="selector-code-collapse">
-                <button>Toggle Code Display</button>
+        <div class="container wrapper" id="container-5">
+            <h3>Progressbar</h3>
+            <div class="well">
+                <p>A progress bar for precentages (Range 0 - 100)</p>
+                <div class="percentage"></div>
+                <p>A progress bar for values (Range 25 - 80) NB: Only works for positive numbers</p>
+                <div class="number"></div>
+                <button data-value="25">Set to 25</button>
+                <button data-value="50">Set to 50</button>
+                <button data-value="75">Set to 75</button>
+                <br /><br />
+                <div class="selector-code-collapse">
+                    <button>Toggle Code Display</button>
 <pre style="display: none;"><code class="html">&lt;div id="container"&gt;
     &lt;div class="percentage"&gt;&lt;/div&gt;
     &lt;div class="number"&gt;&lt;/div&gt;
@@ -304,19 +391,19 @@ $("#container .password").labeledInput(
 $("#container div.percentage").bs_progress({ valuenow: 50 });
 $("#container div.number").bs_progress({ valuenow: 75, valuemin: 25, valuemax: 80 });
 </code></pre>
-            </div>
+                </div>
             </div>
         </div>
 
-    <!-- breadcrumbs -->
+        <!-- breadcrumbs -->
 
-    <div class="container wrapper" id="container-6">
-        <h3>Breadcrumbs</h3>
-        <div class="well">
-            <p>Breadcrumb trail of where the page is</p>
-            <div class="trail"></div>
-            <div class="selector-code-collapse">
-                <button>Toggle Code Display</button>
+        <div class="container wrapper" id="container-6">
+            <h3>Breadcrumbs</h3>
+            <div class="well">
+                <p>Breadcrumb trail of where the page is</p>
+                <div class="trail"></div>
+                <div class="selector-code-collapse">
+                    <button>Toggle Code Display</button>
 <pre style="display: none;"><code class="html">&lt;div id="container"&gt;
     &lt;div&gt;&lt;/div&gt;
 &lt;/div&gt;
@@ -329,22 +416,22 @@ $("#container div.number").bs_progress({ valuenow: 75, valuemin: 25, valuemax: 8
     ]
 });
 </code></pre>
-            </div>
+                </div>
             </div>
         </div>
 
-    <!-- tables -->
+        <!-- tables -->
 
-    <div class="container wrapper" id="container-7">
-        <h3>Tables</h3>
-        <div class="well">
-            <p>Simple formatting for table data, sortable by clicking on column headers</p>
-            <div>
-                <table></table>
-                <div class="feedback">Data from clicked rows will be displayed here</div>
-            </div>
-            <div class="selector-code-collapse">
-                <button>Toggle Code Display</button>
+        <div class="container wrapper" id="container-7">
+            <h3>Tables</h3>
+            <div class="well">
+                <p>Simple formatting for table data, sortable by clicking on column headers</p>
+                <div>
+                    <table></table>
+                    <div class="feedback">Data from clicked rows will be displayed here</div>
+                </div>
+                <div class="selector-code-collapse">
+                    <button>Toggle Code Display</button>
 <pre style="display: none;"><code class="html">&lt;div id="container"&gt;
     &lt;table&gt;&lt;/table&gt;
 &lt;/div&gt;
@@ -367,23 +454,23 @@ $("#container div.number").bs_progress({ valuenow: 75, valuemin: 25, valuemax: 8
     }
 });
 </code></pre>
-            </div>
+                </div>
             </div>
         </div>
 
-    <!-- notifications / alerts -->
+        <!-- notifications / alerts -->
 
-    <div class="container wrapper" id="container-8">
-        <h3>Alerts</h3>
-        <div class="well">
-            <p>Positionable information / alert messages</p>
-            <div>
-                <button class="selector-alert" data-position="fixed-bottom" data-type="danger">Show Bottom Danger</button>
-                <button class="selector-alert" data-position="fixed-top" data-type="info">Show Top Info</button>
-                <br /><br />
-            </div>
-            <div class="selector-code-collapse">
-                <button>Toggle Code Display</button>
+        <div class="container wrapper" id="container-8">
+            <h3>Alerts</h3>
+            <div class="well">
+                <p>Positionable information / alert messages</p>
+                <div>
+                    <button class="selector-alert" data-position="fixed-bottom" data-type="danger">Show Bottom Danger</button>
+                    <button class="selector-alert" data-position="fixed-top" data-type="info">Show Top Info</button>
+                    <br /><br />
+                </div>
+                <div class="selector-code-collapse">
+                    <button>Toggle Code Display</button>
 <pre style="display: none;"><code class="html">&lt;div id="container"&gt;
     &lt;button class="selector-alert" data-position="fixed-bottom" data-type="danger"&gt;Show Bottom Danger&lt;/button&gt;
     &lt;button class="selector-alert" data-position="fixed-top" data-type="info"&gt;Show Top Info&lt;/button&gt;
@@ -399,13 +486,13 @@ $("#container div.number").bs_progress({ valuenow: 75, valuemin: 25, valuemax: 8
         });
     });
 </code></pre>
-            </div>
+                </div>
             </div>
         </div>
-    <!-- padding at the bottom -->
+        <!-- padding at the bottom -->
 
 
-    <div style="height: 50px;"></div>
+        <div style="height: 50px;"></div>
 
 </body>
 </html>
