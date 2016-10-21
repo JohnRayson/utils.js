@@ -54,6 +54,46 @@
         });
     };
 
+    
+    $.fn.alert = function (message)
+    {
+        $.fn.dialogue("Alert", message);
+    };
+    $.fn.dialogue = function (title, message, options)
+    {
+        var defaults = {};
+        // generate an id for the element - not 100% needed
+        // could just as easily be passed in if you needed to reference it externally
+        var id = $.utils.createUUID();
+
+        // removal function
+        var dismiss = function ()
+        {
+            // hide the dialogue
+            $modal.modal("hide");
+            // remove the blanking
+            $modal.prev().remove();
+            // remove the dialogue
+            $modal.empty().remove();
+        }
+        // create the DOM structure
+        var $modal = $("<div />").attr("id", id).attr("role", "dialog").addClass("modal fade")
+                        .append($("<div />").addClass("modal-dialog")
+                            .append($("<div />").addClass("modal-content")
+                                .append($("<div />").addClass("modal-header")
+                                    .append($("<button />").attr("type", "button").addClass("close").html("&times;").click(function () { dismiss() }))
+                                    .append($("<h4 />").addClass("modal-title").text(title)))
+                                .append($("<div />").addClass("modal-body")
+                                    .append($("<p />").text(message)))
+                                .append($("<div />").addClass("modal-footer")
+                                    .append($("<button />").addClass("btn btn-default").attr("type", "button").text("Close").click(function () { dismiss() }))
+                                )
+                            )
+                        );
+        // show the dialogue
+        $modal.modal("show");
+    };
+
     //bs_progress
     ; (function ()
     {
@@ -166,8 +206,8 @@
 						        + "			<span class='icon-bar'></span>"
 						        + "			<span class='icon-bar'></span>"))
                             .append($("<a class='utils-link' />").addClass("navbar-brand")
-                                .append(document.createTextNode(settings.label))))
-				    .append($("<div />").addClass("collapse navbar-collapse").attr("id",id)));
+                                .append(settings.label instanceof jQuery? settings.label : document.createTextNode(settings.label))))
+				    .append($("<div />").addClass("collapse navbar-collapse navbar-primary-container").attr("id", id)));
 				 
 			for(var i=0; i < settings.groups.length; i++)
 			{
@@ -334,6 +374,19 @@
                         $el.find(":first-child")[settings.method[1]](200, function () { doOver("previous"); });
                 });
             }
+			
+			this.mask = function ($content)
+            {
+                var settings = $el.data("settings");
+                if (!settings)
+                    settings = { "method": ["fadeOut", "fadeIn"], "speed": 200 };
+
+                $el.children()[settings.method[0]](settings.speed, function ()
+                {
+                    $el.append($content);
+                });
+
+            }
 
             function doOver(func)
             {
@@ -346,7 +399,7 @@
             if (settings && typeof (settings) == 'string')
             {
                 if (this[settings])
-                    this[settings]();
+                    this[settings](args);
 
                 return;
             }

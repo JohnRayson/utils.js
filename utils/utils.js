@@ -192,7 +192,7 @@ head.appendChild(styles);
                 url: settings.baseURL + settings.path,
                 type: settings.type,
                 contentType: settings.contentType,
-                data: JSON.stringify(settings.data), // otherwise jQuery sends it as Form encoded
+                data: (settings.contentType == "application/x-www-form-urlencoded" ? settings.data : JSON.stringify(settings.data)),
                 beforeSend: settings.beforeSend,
                 success: function (data) { that.parseAjaxReply(data, settings.success); },
                 error: function (data) { that.parseAjaxReply(data, settings.error); }
@@ -241,25 +241,6 @@ head.appendChild(styles);
                 })(calls[call]);
             }
         },
-        // display elements
-        alert: function (message)
-        {
-            utils.userChoice("Alert", message);
-        },
-        userChoice: function (title, message, options)
-        {
-            var viewportWidth = $(window).width();
-            var viewportHeight = $(window).height();
-
-            var id = utils.createUUID();
-            var html = "<div id='" + id + "' title='" + title + "'>" // overflow: hidden - control the scrolling in what ever you pass in
-                        + "<div style='overflow: hidden; max-height: " + viewportHeight / 2 + "px; max-width: " + viewportWidth / 2 + "px;'>" + message + "</div>"
-                        + "</div>";
-
-            var defaults = { dialogClass: "no-close", modal: true, closeOnEscape: false, autoOpen: true, buttons: { "Close": function () { $(this).empty().remove(); }}};
-            var settings = $.extend({},defaults, options);
-
-            $(html).dialog(settings);
-        },
+        
     };
 })(jQuery);

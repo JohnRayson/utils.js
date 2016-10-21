@@ -21,6 +21,11 @@
         }
     });
 
+    $("#container-01 button.alert").bs_button().click(function ()
+    {
+        $.fn.alert("utils.js makes this so easy!");
+    });
+
     $("#container-1 nav").bs_navbar(
     {
         label: "Section 1",
