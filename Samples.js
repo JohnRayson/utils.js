@@ -21,9 +21,35 @@
         }
     });
 
-    $("#container-01 button.alert").bs_button().click(function ()
+    $("#container-01 button.selector-alert").bs_button().click(function ()
     {
         $.fn.alert("utils.js makes this so easy!");
+    });
+    $("#container-01 button.selector-dialogue").bs_button().click(function ()
+    {
+        var id = $.utils.createUUID();
+        var $content = $("<div />")
+                            .append($("<ol />")
+                                .append($("<li />").text("An"))
+                                .append($("<li />").text("Ordered"))
+                                .append($("<li />").text("List"))
+                            .append($("<p />").text("This is just a <p> tag to explain that the input below is using $.utils.labeledInput() to add content as the dialogue opens"))
+                            .append($("<div />").addClass("text"))
+                        );
+
+        $.fn.dialogue({
+            title: "Dialogue", 
+            content: $content,
+            buttons: [
+                { text: "Close", click: function ($modal) { $modal.dismiss(); } },
+                { text: "Highlight <p />", click: function ($modal) { $modal.find("p").css({ color: "#f00" }) } },
+                { text: "Alert", click: function () { $.fn.alert("utils.js makes this so easy!"); } },
+            ],
+            open: function ($modal)
+            {
+                $modal.find(".text").labeledInput({ label: "Text input", placeholder: "Text field" });
+            }
+        });
     });
 
     $("#container-1 nav").bs_navbar(

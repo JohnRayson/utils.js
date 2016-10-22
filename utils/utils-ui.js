@@ -57,41 +57,88 @@
     
     $.fn.alert = function (message)
     {
-        $.fn.dialogue("Alert", message);
+        return $.fn.dialogue({
+            title: "Alert", 
+            content: $("<p />").text(message),
+            closeIcon: true,
+            buttons: [
+                { text: "Close", id: $.utils.createUUID(), click: function ($modal) { $modal.dismiss(); } }
+            ]
+        });
     };
-    $.fn.dialogue = function (title, message, options)
+    $.fn.dialogue = function (options)
     {
-        var defaults = {};
-        // generate an id for the element - not 100% needed
-        // could just as easily be passed in if you needed to reference it externally
-        var id = $.utils.createUUID();
+        var defaults = {
+            title: "", content: $("<p />"),
+            closeIcon: false, id: $.utils.createUUID(), open: function () { }, buttons: []
+        };
+        var settings = $.extend(true, {}, defaults, options);
 
-        // removal function
-        var dismiss = function ()
+        // create the DOM structure
+        var $modal = $("<div />").attr("id", settings.id).attr("role", "dialog").addClass("modal fade")
+                        .append($("<div />").addClass("modal-dialog")
+                            .append($("<div />").addClass("modal-content")
+                                .append($("<div />").addClass("modal-header")
+                                    .append($("<h4 />").addClass("modal-title").text(settings.title)))
+                                .append($("<div />").addClass("modal-body")
+                                    .append(settings.content))
+                                .append($("<div />").addClass("modal-footer")
+                                )
+                            )
+                        );
+        $modal.shown = false;
+        $modal.dismiss = function ()
         {
+            // loop until its shown
+            // this is only because you can do $.fn.alert("utils.js makes this so easy!").dismiss(); in which case it will try to remove it before its finished rendering
+            if (!$modal.shown)
+            {
+                window.setTimeout(function ()
+                {
+                    $modal.dismiss();
+                }, 50);
+                return;
+            }
+
             // hide the dialogue
             $modal.modal("hide");
             // remove the blanking
             $modal.prev().remove();
             // remove the dialogue
             $modal.empty().remove();
+
+            $("body").removeClass("modal-open");
         }
-        // create the DOM structure
-        var $modal = $("<div />").attr("id", id).attr("role", "dialog").addClass("modal fade")
-                        .append($("<div />").addClass("modal-dialog")
-                            .append($("<div />").addClass("modal-content")
-                                .append($("<div />").addClass("modal-header")
-                                    .append($("<button />").attr("type", "button").addClass("close").html("&times;").click(function () { dismiss() }))
-                                    .append($("<h4 />").addClass("modal-title").text(title)))
-                                .append($("<div />").addClass("modal-body")
-                                    .append($("<p />").text(message)))
-                                .append($("<div />").addClass("modal-footer")
-                                    .append($("<button />").addClass("btn btn-default").attr("type", "button").text("Close").click(function () { dismiss() }))
-                                )
-                            )
-                        );
+
+        if (settings.closeIcon)
+            $modal.find(".modal-header").prepend($("<button />").attr("type", "button").addClass("close").html("&times;").click(function () { $modal.dismiss() }));
+
+        // add the buttons
+        var $footer = $modal.find(".modal-footer");
+        for(var i=0; i < settings.buttons.length; i++)
+        {
+            (function (btn)
+            {
+                $footer.prepend($("<button />").addClass("btn btn-default")
+                    .attr("id", btn.id)
+                    .attr("type", "button")
+                    .text(btn.text)
+                    .click(function ()
+                    {
+                        btn.click($modal)
+                    }))
+            })(settings.buttons[i]);
+        }
+
+        settings.open($modal);
+
+        $modal.on('shown.bs.modal', function (e) {
+            $modal.shown = true;
+        });
         // show the dialogue
         $modal.modal("show");
+
+        return $modal;
     };
 
     //bs_progress

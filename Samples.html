@@ -17,6 +17,7 @@
 
     <style>
         .wrapper { margin-bottom: 10px; }
+        .btn { margin: 2px; }
     </style>
 
     <script src="Samples.js"></script>
@@ -193,12 +194,41 @@ $.utils.await([
             <h3>Dialogues</h3>
             <div class="well">
                 <p></p>
-                <button class="alert">Alert</button>
+                <button class="selector-alert">Alert</button>
+                <button class="selector-dialogue">Dialogue</button>
                 <div class="selector-code-collapse">
                     <button>Toggle Code Display</button>
 <pre style="display: none;"><code class="html">&lt;!-- no html --&gt;
 </code>
-<code class="javascript">$.alert("utils.js makes this so easy!");
+<code class="javascript" >$("#container-01 button.selector-alert").bs_button().click(function ()
+{
+    $.fn.alert("utils.js makes this so easy!");
+});
+$("#container-01 button.selector-dialogue").bs_button().click(function ()
+{
+    var id = $.utils.createUUID();
+    var $content = $("&lt;div /&gt;")
+                        .append($("&lt;ol /&gt;")
+                            .append($("&lt;li /&gt;").text("An"))
+                            .append($("&lt;li /&gt;").text("Ordered"))
+                            .append($("&lt;li /&gt;").text("List"))
+                        .append($("&lt;p /&gt;").text("This is just a &lt;p /&gt; tag to explain that the input below is using $.utils.labeledInput() to add content as the dialogue opens"))
+                        .append($("&lt;div /&gt;").addClass("text"))
+                    );
+    $.fn.dialogue({
+        title: "Dialogue", 
+        content: $content,
+        buttons: [
+            { text: "Close", click: function ($modal) { $modal.dismiss(); } },
+            { text: "Highlight &lt;p /&gt;", click: function ($modal) { $modal.find("p").css({ color: "#f00" }) } },
+            { text: "Alert", click: function () { $.fn.alert("utils.js makes this so easy!"); } },
+        ],
+        open: function ($modal)
+        {
+            $modal.find(".text").labeledInput({ label: "Text input", placeholder: "Text field" });
+        }
+    });
+});
 </code></pre>
                 </div>
             </div>
