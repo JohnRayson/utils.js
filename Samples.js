@@ -1,5 +1,11 @@
 ﻿$(document).ready(function ()
 {
+    // button to GitHub repository
+    $("#header button.selector-gitlink").bs_button().click(function ()
+    {
+        document.location = "https://github.com/JohnRayson/utils.js";
+    });
+
     // highlight the code
     $('pre code').each(function (i, block)
     {
