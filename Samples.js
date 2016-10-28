@@ -29,7 +29,7 @@
 
     $("#container-01 button.selector-alert").bs_button().click(function ()
     {
-        $.fn.alert("utils.js makes this so easy!");
+        $.utils.alert("utils.js makes this so easy!");
     });
     $("#container-01 button.selector-dialogue").bs_button().click(function ()
     {
@@ -43,7 +43,7 @@
                             .append($("<div />").addClass("text"))
                         );
 
-        $.fn.dialogue({
+        $.utils.dialogue({
             title: "Dialogue", 
             content: $content,
             buttons: [
@@ -172,7 +172,7 @@
 
     $("#container-8 .selector-alert").bs_button().click(function ()
     {
-        $.utils.bs_alert({
+        $.utils.toast({
             title: "Title in bold!",
             msg: "Followed by the message",
             position: $(this).data("position"),

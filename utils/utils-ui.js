@@ -26,7 +26,7 @@
         var defaults = {
             labelcss: { width: "200px", textAlign: "right", display: "inline-block", marginRight: "5px", marginLeft: "5px" },
             inputcss: { width: "200px", display: "inline-block" },
-            label: "", placeholder: "", inputtype: "text", labelposition: "left"
+            label: "", value: "", placeholder: "", inputtype: "text", labelposition: "left"
         };
         var settings = $.extend(true, {}, defaults, options);
 
@@ -44,7 +44,8 @@
                                        .prop("type", settings.inputtype)
                                        .attr("placeholder", settings.placeholder)
                                        .attr("aria-describedby", "label-" + id)
-                                       .addClass("form-control");
+                                       .addClass("form-control")
+                                       .val(settings.value);
 
             if (settings.labelposition == "right")
                 $this.append($input).append($label);
@@ -52,93 +53,6 @@
                 $this.append($label).append($input);
 
         });
-    };
-
-    
-    $.fn.alert = function (message)
-    {
-        return $.fn.dialogue({
-            title: "Alert", 
-            content: $("<p />").text(message),
-            closeIcon: true,
-            buttons: [
-                { text: "Close", id: $.utils.createUUID(), click: function ($modal) { $modal.dismiss(); } }
-            ]
-        });
-    };
-    $.fn.dialogue = function (options)
-    {
-        var defaults = {
-            title: "", content: $("<p />"),
-            closeIcon: false, id: $.utils.createUUID(), open: function () { }, buttons: []
-        };
-        var settings = $.extend(true, {}, defaults, options);
-
-        // create the DOM structure
-        var $modal = $("<div />").attr("id", settings.id).attr("role", "dialog").addClass("modal fade")
-                        .append($("<div />").addClass("modal-dialog")
-                            .append($("<div />").addClass("modal-content")
-                                .append($("<div />").addClass("modal-header")
-                                    .append($("<h4 />").addClass("modal-title").text(settings.title)))
-                                .append($("<div />").addClass("modal-body")
-                                    .append(settings.content))
-                                .append($("<div />").addClass("modal-footer")
-                                )
-                            )
-                        );
-        $modal.shown = false;
-        $modal.dismiss = function ()
-        {
-            // loop until its shown
-            // this is only because you can do $.fn.alert("utils.js makes this so easy!").dismiss(); in which case it will try to remove it before its finished rendering
-            if (!$modal.shown)
-            {
-                window.setTimeout(function ()
-                {
-                    $modal.dismiss();
-                }, 50);
-                return;
-            }
-
-            // hide the dialogue
-            $modal.modal("hide");
-            // remove the blanking
-            $modal.prev().remove();
-            // remove the dialogue
-            $modal.empty().remove();
-
-            $("body").removeClass("modal-open");
-        }
-
-        if (settings.closeIcon)
-            $modal.find(".modal-header").prepend($("<button />").attr("type", "button").addClass("close").html("&times;").click(function () { $modal.dismiss() }));
-
-        // add the buttons
-        var $footer = $modal.find(".modal-footer");
-        for(var i=0; i < settings.buttons.length; i++)
-        {
-            (function (btn)
-            {
-                $footer.prepend($("<button />").addClass("btn btn-default")
-                    .attr("id", btn.id)
-                    .attr("type", "button")
-                    .text(btn.text)
-                    .click(function ()
-                    {
-                        btn.click($modal)
-                    }))
-            })(settings.buttons[i]);
-        }
-
-        settings.open($modal);
-
-        $modal.on('shown.bs.modal', function (e) {
-            $modal.shown = true;
-        });
-        // show the dialogue
-        $modal.modal("show");
-
-        return $modal;
     };
 
     //bs_progress
@@ -577,7 +491,94 @@
 // these do not modify existing DOM elements, but adds elements
 (function ($)
 {
-    $.utils.bs_alert = function (options)
+    $.utils.alert = function (message)
+    {
+        return $.utils.dialogue({
+            title: "Alert",
+            content: $("<p />").text(message),
+            closeIcon: true,
+            buttons: [
+                { text: "Close", id: $.utils.createUUID(), click: function ($modal) { $modal.dismiss(); } }
+            ]
+        });
+    };
+    $.utils.dialogue = function (options)
+    {
+        var defaults = {
+            title: "", content: $("<p />"),
+            closeIcon: false, id: $.utils.createUUID(), open: function () { }, buttons: []
+        };
+        var settings = $.extend(true, {}, defaults, options);
+
+        // create the DOM structure
+        var $modal = $("<div />").attr("id", settings.id).attr("role", "dialog").addClass("modal fade")
+                        .append($("<div />").addClass("modal-dialog")
+                            .append($("<div />").addClass("modal-content")
+                                .append($("<div />").addClass("modal-header")
+                                    .append($("<h4 />").addClass("modal-title").text(settings.title)))
+                                .append($("<div />").addClass("modal-body")
+                                    .append(settings.content))
+                                .append($("<div />").addClass("modal-footer")
+                                )
+                            )
+                        );
+        $modal.shown = false;
+        $modal.dismiss = function ()
+        {
+            // loop until its shown
+            // this is only because you can do $.fn.alert("utils.js makes this so easy!").dismiss(); in which case it will try to remove it before its finished rendering
+            if (!$modal.shown)
+            {
+                window.setTimeout(function ()
+                {
+                    $modal.dismiss();
+                }, 50);
+                return;
+            }
+
+            // hide the dialogue
+            $modal.modal("hide");
+            // remove the blanking
+            $modal.prev().remove();
+            // remove the dialogue
+            $modal.empty().remove();
+
+            $("body").removeClass("modal-open");
+        }
+
+        if (settings.closeIcon)
+            $modal.find(".modal-header").prepend($("<button />").attr("type", "button").addClass("close").html("&times;").click(function () { $modal.dismiss() }));
+
+        // add the buttons
+        var $footer = $modal.find(".modal-footer");
+        for (var i = 0; i < settings.buttons.length; i++)
+        {
+            (function (btn)
+            {
+                $footer.prepend($("<button />").addClass("btn btn-default")
+                    .attr("id", btn.id)
+                    .attr("type", "button")
+                    .text(btn.text)
+                    .click(function ()
+                    {
+                        btn.click($modal)
+                    }))
+            })(settings.buttons[i]);
+        }
+
+        settings.open($modal);
+
+        $modal.on('shown.bs.modal', function (e)
+        {
+            $modal.shown = true;
+        });
+        // show the dialogue
+        $modal.modal("show");
+
+        return $modal;
+    };
+
+    $.utils.toast = function (options)
     {
         var defaults = { parent: $("body"), position: "fixed-bottom", type: "danger", allowClose: true, title: "Notice", msg: "" };
         var settings = $.extend(true, {}, defaults, options);
