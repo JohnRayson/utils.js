@@ -523,6 +523,8 @@
                             )
                         );
         $modal.shown = false;
+        // firefox has an issue with increasing the right-padding on doc.body with ech dialogue shown
+        $modal.originalBodyMargin = $("body").css("padding-right");
         $modal.dismiss = function ()
         {
             // loop until its shown
@@ -543,7 +545,7 @@
             // remove the dialogue
             $modal.empty().remove();
 
-            $("body").removeClass("modal-open");
+            $("body").removeClass("modal-open").css("padding-right", $modal.originalBodyMargin);
         }
 
         if (settings.closeIcon)
