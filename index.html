@@ -130,14 +130,15 @@ for (var i = 0; i < 3; i++)
 
         <div class="well">
             <p>Assert that variable matches the expected type and that its in range</p>
-<pre style="display: block;"><code class="javascript">$.utils.assert({ variable: foo, type: "number", min: 0, max: 100})
+<pre style="display: block;"><code class="javascript">$.utils.assert({ variable: (var), type: (string), min: (int), max: (int), allowNull: (bool)})
 
-<script>document.write("$.utils.assert({ variable: 3, type: 'number', min: 0, max: 10})   //" + $.utils.assert({ variable: 3, type: "number", min: 0, max: 10 }));</script>
-<script>document.write("$.utils.assert({ variable: 30, type: 'number', min: 0, max: 10})  //" + $.utils.assert({ variable: 30, type: "number", min: 0, max: 10 }));</script>
-<script>document.write("$.utils.assert({ variable: 'foo', type: 'string'})                //" + $.utils.assert({ variable: "foo", type: "string"}));</script>
-<script>document.write("$.utils.assert({ variable: $.utils, type: 'function'})            //" + $.utils.assert({ variable: $.utils, type: "function" }));</script>
-<script>document.write("$.utils.assert({ variable: $.utils, type: 'object'})              //" + $.utils.assert({ variable: $.utils, type: "object" }));</script>
-
+<script>document.write("$.utils.assert({ variable: 3, type: 'number', min: 0, max: 10})     //" + $.utils.assert({ variable: 3, type: "number", min: 0, max: 10 }));</script>
+<script>document.write("$.utils.assert({ variable: 30, type: 'number', min: 0, max: 10})    //" + $.utils.assert({ variable: 30, type: "number", min: 0, max: 10 }));</script>
+<script>document.write("$.utils.assert({ variable: 'foo', type: 'string'})                  //" + $.utils.assert({ variable: "foo", type: "string"}));</script>
+<script>document.write("$.utils.assert({ variable: $.utils, type: 'function'})              //" + $.utils.assert({ variable: $.utils, type: "function" }));</script>
+<script>document.write("$.utils.assert({ variable: $.utils, type: 'object'})                //" + $.utils.assert({ variable: $.utils, type: "object" }));</script>
+<script>document.write("$.utils.assert({ variable: null, type: 'object'})                   //" + $.utils.assert({ variable: null, type: 'object'}));</script>
+<script>document.write("$.utils.assert({ variable: null, type: 'object', allowNull: true})  //" + $.utils.assert({ variable: null, type: 'object', allowNull: true }));</script>
 </code></pre>
         </div>
 

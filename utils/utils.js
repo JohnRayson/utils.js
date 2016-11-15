@@ -16,7 +16,7 @@ head.appendChild(styles);
     $.utils = {
         assert: function(options)
         {
-            var defaults = { variable: null, type: "undefined", min: null, max: null };
+            var defaults = { variable: null, type: "undefined", min: null, max: null, allowNull: false };
             var settings = $.extend({}, defaults, options);
 
             // check that the type is a string
@@ -25,6 +25,10 @@ head.appendChild(styles);
                 console.log("$.utils.assert() type must be a string");
                 return false;
             }
+            // if null is allowed and the variable is null, return true
+            if (settings.allowNull && settings.variable == null)
+                return true;
+
             var type = $.type(settings.variable)
             if (type != settings.type)
             {
