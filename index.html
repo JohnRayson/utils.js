@@ -129,6 +129,19 @@ for (var i = 0; i < 3; i++)
         </div>
 
         <div class="well">
+            <p>Assert that variable matches the expected type and that its in range</p>
+<pre style="display: block;"><code class="javascript">$.utils.assert({ variable: foo, type: "number", min: 0, max: 100})
+
+<script>document.write("$.utils.assert({ variable: 3, type: 'number', min: 0, max: 10})   //" + $.utils.assert({ variable: 3, type: "number", min: 0, max: 10 }));</script>
+<script>document.write("$.utils.assert({ variable: 30, type: 'number', min: 0, max: 10})  //" + $.utils.assert({ variable: 30, type: "number", min: 0, max: 10 }));</script>
+<script>document.write("$.utils.assert({ variable: 'foo', type: 'string'})                //" + $.utils.assert({ variable: "foo", type: "string"}));</script>
+<script>document.write("$.utils.assert({ variable: $.utils, type: 'function'})            //" + $.utils.assert({ variable: $.utils, type: "function" }));</script>
+<script>document.write("$.utils.assert({ variable: $.utils, type: 'object'})              //" + $.utils.assert({ variable: $.utils, type: "object" }));</script>
+
+</code></pre>
+        </div>
+
+        <div class="well">
             <p>A wrapper to allow standard settings to be used for all ajax calls. This can be set directly but a helper function is supplied to allow easy merging of settings. Subsequent calls can then be made by specifing only the minimum amount of information</p>
 <pre style="display: block;"><code class="javascript">$.utils.ajaxOptions.set(object:options) 
 

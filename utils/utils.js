@@ -14,6 +14,39 @@ head.appendChild(styles);
 (function ($)
 {
     $.utils = {
+        assert: function(options)
+        {
+            var defaults = { variable: null, type: "undefined", min: null, max: null };
+            var settings = $.extend({}, defaults, options);
+
+            // check that the type is a string
+            if(!$.type(settings.type === "string"))
+            {
+                console.log("$.utils.assert() type must be a string");
+                return false;
+            }
+            var type = $.type(settings.variable)
+            if (type != settings.type)
+            {
+                console.log(settings.variable + " is not of expected type: " + settings.type);
+                return false;
+            }
+            // only works with numbers, dates need adding
+            if (type === "number")
+            {
+                if (settings.min && settings.variable < settings.min)
+                {
+                    console.log(settings.variable + " is out of range");
+                    return false;
+                }
+                if (settings.max && settings.variable > settings.max)
+                {
+                    console.log(settings.variable + " is out of range");
+                    return false;
+                }
+            }
+            return true;
+        },
         // http://stackoverflow.com/a/950146
         loadExternal: function (url, type, callback)
         {
