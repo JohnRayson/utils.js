@@ -14,15 +14,23 @@ head.appendChild(styles);
 (function ($)
 {
     $.utils = {
+        console: {
+            warn: function (data) { window.console && console.warn(data) },
+            log: function (data) { window.console && console.log(data) },
+            info: function (data) { window.console && console.info(data) },
+            error: function (data) { window.console && console.error(data) }
+        },
         assert: function(options)
         {
+            var self = this;
+
             var defaults = { variable: null, type: "undefined", min: null, max: null, allowNull: false };
             var settings = $.extend({}, defaults, options);
 
             // check that the type is a string
             if(!$.type(settings.type === "string"))
             {
-                console.log("$.utils.assert() type must be a string");
+                self.console.warn("$.utils.assert() type must be a string");
                 return false;
             }
             // if null is allowed and the variable is null, return true
@@ -32,7 +40,7 @@ head.appendChild(styles);
             var type = $.type(settings.variable)
             if (type != settings.type)
             {
-                console.log(settings.variable + " is not of expected type: " + settings.type);
+                self.console.warn(settings.variable + " is not of expected type: " + settings.type);
                 return false;
             }
             // only works with numbers, dates need adding
@@ -40,12 +48,12 @@ head.appendChild(styles);
             {
                 if (settings.min && settings.variable < settings.min)
                 {
-                    console.log(settings.variable + " is out of range");
+                    self.console.warn(settings.variable + " is out of range");
                     return false;
                 }
                 if (settings.max && settings.variable > settings.max)
                 {
-                    console.log(settings.variable + " is out of range");
+                    self.console.warn(settings.variable + " is out of range");
                     return false;
                 }
             }

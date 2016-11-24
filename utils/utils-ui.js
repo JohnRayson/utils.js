@@ -506,6 +506,7 @@
     {
         var defaults = {
             title: "", content: $("<p />"),
+            css: {},
             closeIcon: false, id: $.utils.createUUID(), open: function () { }, buttons: []
         };
         var settings = $.extend(true, {}, defaults, options);
@@ -516,7 +517,7 @@
                             .append($("<div />").addClass("modal-content")
                                 .append($("<div />").addClass("modal-header")
                                     .append($("<h4 />").addClass("modal-title").text(settings.title)))
-                                .append($("<div />").addClass("modal-body")
+                                .append($("<div />").addClass("modal-body").css(settings.css)
                                     .append(settings.content))
                                 .append($("<div />").addClass("modal-footer")
                                 )
