@@ -130,9 +130,9 @@ head.appendChild(styles);
             set: function (key, value, fixed)
             {
                 // set it if a.) it doesn't exist OR b.) its not fixed
-                if (!utils.vars[key] || !utils.vars[key].fixed)
+                if (!$.utils.vars[key] || !$.utils.vars[key].fixed)
                 {
-                    utils.vars[key] = { value: value, fixed: (fixed || false) }
+                    $.utils.vars[key] = { value: value, fixed: (fixed || false) }
                     return true;
                 }
                 // either we passed in junk or tried to set a fixed var
@@ -141,11 +141,11 @@ head.appendChild(styles);
             get: function (key, info)
             {
                 // just get the value
-                if (utils.vars[key] && !info)
-                    return utils.vars[key].value;
+                if ($.utils.vars[key] && !info)
+                    return $.utils.vars[key].value;
                 // get the whole schebang
                 if (info)
-                    return utils.vars[key] || false;
+                    return $.utils.vars[key] || false;
                 // not found
                 return false;
             }
@@ -249,6 +249,35 @@ head.appendChild(styles);
             if (data["d"])
                 data = data["d"];
             replyFunc(data);
+        },
+        // call the same ajax endpoint on a regular basis (in seconds)
+        poll: function (options, frequency)
+        {
+            if (!frequency)
+                frequency = 60; // default to rather slow
+            // convert to milliseconds
+            frequency = (frequency * 1000);
+
+            // give it an id to return
+            var id = $.utils.createUUID();
+            // set an inteval and record it
+            (function (options)
+            {
+                $.utils.vars.set(id, window.setInterval(function ()
+                {
+                    $.utils.ajax(options);
+                }, frequency));
+            })(options);
+
+            // do it right now as well
+            $.utils.ajax(options);
+
+            // send back the id so we can stop it if we need to
+            return id;
+        },
+        stopPoll: function (id)
+        {
+            window.clearInterval($.utils.vars.get(id));
         },
         await: function (calls, complete)
         {
