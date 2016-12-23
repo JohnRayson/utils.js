@@ -486,6 +486,37 @@
         }
     })();
 
+    // get all the headers on the page, by section / article.
+    // the section / article is worked out based on parent of the header
+    $.fn.toc = function (options)
+    {
+        var settings = $.extend({}, { "minHeader": 6 }, options);
+        return this.each(function ()
+        {
+            var $el = $(this);
+
+            var selector = "h1";
+            for (var i = 2; i < settings.minHeader; i++)
+                selector += ", h" + i;
+
+            var toc = [];
+            var $h = $(selector).each(function ()
+            {
+                var $h = $(this);
+                toc.push($h.text());
+            });
+            // build a new list
+            var $ul = $("<ul />");
+
+            for (var i = 0; i < toc.length; i++)
+            {
+                $ul.append($("<li />").text(toc[i]));
+            }
+
+            // replace the content of the el with the new list
+            $el.html($ul);
+        });
+    };
 })(jQuery);
 
 // these do not modify existing DOM elements, but adds elements
@@ -616,7 +647,10 @@
             $alertHolder = $("<div />").css(cssPosition).addClass(settings.position);
             settings.parent.append($alertHolder);
         }
-        
+
         $alertHolder.append($el);
-    }
+    };
+
+    
+
 })(jQuery);

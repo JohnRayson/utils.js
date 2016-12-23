@@ -4,7 +4,7 @@
     <title>Utils.js</title>
 
     <script src='jquery/jquery-3.1.0.min.js'></script>
-    <script src='jquery/jquery-ui.min.js'></script>
+    <!-- <script src='jquery/jquery-ui.min.js'></script>-->
 
     <script src='bootstrap/bootstrap.min.js'></script>
     <link href='bootstrap/bootstrap.min.css' rel='stylesheet' />
@@ -18,12 +18,14 @@
     <style>
         .wrapper { margin-bottom: 10px; }
         .btn { margin: 2px; }
+        #right_menu { position: absolute; width: 250px; top: 420px; right: 0px; }
     </style>
 
     <script src="Samples.js"></script>
 
 </head>
 <body>
+        <div id="right_menu" ></div>
         <div id="header" class="container-fluid" style="height: 420px; background-color: #004225; font-size: 18px; font-weight: bold; color: white;" >
             <div style="font-family: Courier New, Courier, monospace; margin: 30px auto; width: 200px; height: 200px; font-weight: bold; font-size: 150px; text-align: center; border: 2px solid #fff; border-radius: 10px; ">U</div>
             <div style="margin: auto; width: 500px;">
@@ -61,7 +63,7 @@
     &lt;head&gt;
         &lt;!-- jQuery + jQuery-ui --&gt;
         &lt;script src='jquery/jquery-3.1.0.min.js'&gt;&lt;/script&gt;
-        &lt;script src='jquery/jquery-ui.min.js'&gt;&lt;/script&gt;
+        &lt;!--&lt;script src='jquery/jquery-ui.min.js'&gt;&lt;/script&gt;--&gt;
 
         &lt;!-- bootstrap + its CSS, you can switch the CSS out for any bootstrap template --&gt;
         &lt;script src='bootstrap/bootstrap.min.js'&gt;&lt;/script&gt;
@@ -115,11 +117,11 @@ $.utils.await(array:calls, func:complete)
     </div>
 
     <div class="container wrapper" id="container-0">
-        <h3>Core Functionality</h3>
+        <h3>Core Functionality (utils.js)</h3>
+        <p>All core functionality is in utils.js, none of this directly effects the UI but contains a set of tools for data management.<br />utils.js has no dependencies on utils-ui.js</p>
         <div class="well">
             <p>Create a UUID, internally this is also used with a lot of the UI componants to provide unique identifiers for the elements</p>
 <pre style="display: block;"><code class="javascript">$.utils.createUUID()
-
 for (var i = 0; i < 3; i++) 
 { 
     document.write( "//&lt;br /&gt;" + $.utils.createUUID()); 
@@ -131,13 +133,12 @@ for (var i = 0; i < 3; i++)
         <div class="well">
             <p>Assert that variable matches the expected type and that its in range</p>
 <pre style="display: block;"><code class="javascript">$.utils.assert({ variable: (var), type: (string), min: (int), max: (int), allowNull: (bool)})
-
 <script>document.write("$.utils.assert({ variable: 3, type: 'number', min: 0, max: 10})     //" + $.utils.assert({ variable: 3, type: "number", min: 0, max: 10 }));</script>
 <script>document.write("$.utils.assert({ variable: 30, type: 'number', min: 0, max: 10})    //" + $.utils.assert({ variable: 30, type: "number", min: 0, max: 10 }));</script>
-<script>document.write("$.utils.assert({ variable: 'foo', type: 'string'})                  //" + $.utils.assert({ variable: "foo", type: "string"}));</script>
+<script>document.write("$.utils.assert({ variable: 'foo', type: 'string'})                  //" + $.utils.assert({ variable: "foo", type: "string" }));</script>
 <script>document.write("$.utils.assert({ variable: $.utils, type: 'function'})              //" + $.utils.assert({ variable: $.utils, type: "function" }));</script>
 <script>document.write("$.utils.assert({ variable: $.utils, type: 'object'})                //" + $.utils.assert({ variable: $.utils, type: "object" }));</script>
-<script>document.write("$.utils.assert({ variable: null, type: 'object'})                   //" + $.utils.assert({ variable: null, type: 'object'}));</script>
+<script>document.write("$.utils.assert({ variable: null, type: 'object'})                   //" + $.utils.assert({ variable: null, type: 'object' }));</script>
 <script>document.write("$.utils.assert({ variable: null, type: 'object', allowNull: true})  //" + $.utils.assert({ variable: null, type: 'object', allowNull: true }));</script>
 </code></pre>
         </div>
@@ -145,7 +146,6 @@ for (var i = 0; i < 3; i++)
         <div class="well">
             <p>A wrapper to allow standard settings to be used for all ajax calls. This can be set directly but a helper function is supplied to allow easy merging of settings. Subsequent calls can then be made by specifing only the minimum amount of information</p>
 <pre style="display: block;"><code class="javascript">$.utils.ajaxOptions.set(object:options) 
-
 ajaxOptions: { 
     //
     global: true,
@@ -179,7 +179,6 @@ ajaxOptions: {
         <div class="well">
             <p>Making ajax calls</p>
 <pre style="display: block;"><code class="javascript">$.utils.ajax(object:options)
-
 $.utils.ajax({
     path: "postSomething",
     data: { variable1: "sausages" },
@@ -194,7 +193,6 @@ $.utils.ajax({
         <div class="well">
             <p>Making multiple ajax calls, and waiting for them all to complete</p>
 <pre style="display: block;"><code class="javascript">$.utils.await(array:calls, func:complete)
-
 $.utils.await([
     {
         path: "getMethod",
@@ -214,20 +212,38 @@ $.utils.await([
 );
 </code></pre>
         </div>
-    </div>
-    <!-- Nav bar -->
+        <div class="well">
+            <p>Peridoically calling the same AJAX endpoint</p>
+            <pre style="display: block;"><code class="javascript">$.utils.poll(object:options, int:frequency(s));
 
-        <div class="container wrapper" id="container-01">
-            <h3>Dialogues</h3>
-            <div class="well">
-                <p></p>
-                <button class="selector-alert">Alert</button>
-                <button class="selector-dialogue">Dialogue</button>
-                <div class="selector-code-collapse">
-                    <button>Toggle Code Display</button>
+var callId = $.utils.poll({
+    path: "postSomething",
+    data: { variable1: "sausages" },
+    success: function(data)
+    {
+        // process data
+    }
+},30);
+// to cancel the repeat calls, keep hold of the id and pass it to clearInterval()
+window.clearInterval(callId);
+        </code></pre>
+        </div>
+        <!-- Nav bar -->
+        <div class="container wrapper" id="container-ui">
+            <h3>UI Functionality (utils-ui.js)</h3>
+            <p>All UI functionality is included in utils-ui.js<br />utils-ui.js is dependent upon utils.js</p>
+        </div>
+            <div class="container wrapper" id="container-01">
+                <h3>Dialogues</h3>
+                <div class="well">
+                    <p></p>
+                    <button class="selector-alert">Alert</button>
+                    <button class="selector-dialogue">Dialogue</button>
+                    <div class="selector-code-collapse">
+                        <button>Toggle Code Display</button>
 <pre style="display: none;"><code class="html">&lt;!-- no html --&gt;
 </code>
-<code class="javascript" >$("#container-01 button.selector-alert").bs_button().click(function ()
+<code class="javascript">$("#container-01 button.selector-alert").bs_button().click(function ()
 {
     $.fn.alert("utils.js makes this so easy!");
 });
@@ -257,20 +273,20 @@ $("#container-01 button.selector-dialogue").bs_button().click(function ()
     });
 });
 </code></pre>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Nav bar -->
+            <!-- Nav bar -->
 
-        <div class="container wrapper" id="container-1">
-            <h3>Basic Navbar</h3>
-            <div class="well">
-                <p>Simple dropdown</p>
-                <nav></nav>
-                <div id="output-1" class="container">&nbsp;</div>
-                <div class="selector-code-collapse">
-                    <button>Toggle Code Display</button>
+            <div class="container wrapper" id="container-1">
+                <h3>Basic Navbar</h3>
+                <div class="well">
+                    <p>Simple dropdown</p>
+                    <nav></nav>
+                    <div id="output-1" class="container">&nbsp;</div>
+                    <div class="selector-code-collapse">
+                        <button>Toggle Code Display</button>
 <pre style="display: none;"><code class="html">&lt;div id="container"&gt;
     &lt;nav&gt;&lt;/nav&gt;
 &lt;/div&gt;
@@ -301,20 +317,20 @@ $("#container-01 button.selector-dialogue").bs_button().click(function ()
     ]
 });
 </code></pre>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- advanced navbar -->
+            <!-- advanced navbar -->
 
-        <div class="container wrapper" id="container-2">
-            <h3>Advanced Navbar</h3>
-            <div class="well">
-                <p>Including links, left and right aligned content</p>
-                <nav></nav>
-                <div id="output-2" class="container">&nbsp;</div>
-                <div class="selector-code-collapse">
-                    <button>Toggle Code Display</button>
+            <div class="container wrapper" id="container-2">
+                <h3>Advanced Navbar</h3>
+                <div class="well">
+                    <p>Including links, left and right aligned content</p>
+                    <nav></nav>
+                    <div id="output-2" class="container">&nbsp;</div>
+                    <div class="selector-code-collapse">
+                        <button>Toggle Code Display</button>
 <pre style="display: none;"><code class="html">&lt;div id="container"&gt;
     &lt;nav&gt;&lt;/nav&gt;
 &lt;/div&gt;
@@ -366,24 +382,24 @@ $("#container-01 button.selector-dialogue").bs_button().click(function ()
     ]
 });
 </code></pre>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- content switcher  -->
+            <!-- content switcher  -->
 
-        <div class="container wrapper" id="container-3">
-            <h3>Content Switcher</h3>
-            <div class="well">
-                <p>Pre-configured content switches on button click</p>
-                <button>Click Me! To change the text below</button>
-                <div id="switcher">
-                    <div>This message will scroll round a pre-configured list, this is item 1</div>
-                    <div>This is item 2, there is more to come</div>
-                    <div>This is item 3, its the last one. After this it will go back to the start</div>
-                </div>
-                <div class="selector-code-collapse">
-                    <button>Toggle Code Display</button>
+            <div class="container wrapper" id="container-3">
+                <h3>Content Switcher</h3>
+                <div class="well">
+                    <p>Pre-configured content switches on button click</p>
+                    <button>Click Me! To change the text below</button>
+                    <div id="switcher">
+                        <div>This message will scroll round a pre-configured list, this is item 1</div>
+                        <div>This is item 2, there is more to come</div>
+                        <div>This is item 3, its the last one. After this it will go back to the start</div>
+                    </div>
+                    <div class="selector-code-collapse">
+                        <button>Toggle Code Display</button>
 <pre style="display: none;"><code class="html">&lt;div id="container"&gt;
     &lt;button&gt;Click me&lt;/button&gt;
     &lt;div id="switcher"&gt;
@@ -399,19 +415,19 @@ $("#container-01 button.selector-dialogue").bs_button().click(function ()
 });
 $("#switcher").bs_switcher();
 </code></pre>
+                    </div>
                 </div>
-            </div>
 
-            <!-- labeled input -->
+                <!-- labeled input -->
 
-            <div class="container wrapper" id="container-4">
-                <h3>Labeled Input</h3>
-                <p>Password field is using right aligned label</p>
-                <div class="text"></div>
-                <div class="number"></div>
-                <div class="password"></div>
-                <div class="selector-code-collapse">
-                    <button>Toggle Code Display</button>
+                <div class="container wrapper" id="container-4">
+                    <h3>Labeled Input</h3>
+                    <p>Password field is using right aligned label</p>
+                    <div class="text"></div>
+                    <div class="number"></div>
+                    <div class="password"></div>
+                    <div class="selector-code-collapse">
+                        <button>Toggle Code Display</button>
 <pre style="display: none;"><code class="html">&lt;div id="container"&gt;
     &lt;div class="text"&gt;&lt;/div&gt;
     &lt;div class="number"&gt;&lt;/div&gt;
@@ -430,25 +446,25 @@ $("#container .password").labeledInput(
     }
 );
 </code></pre>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- progress -->
+            <!-- progress -->
 
-        <div class="container wrapper" id="container-5">
-            <h3>Progressbar</h3>
-            <div class="well">
-                <p>A progress bar for precentages (Range 0 - 100)</p>
-                <div class="percentage"></div>
-                <p>A progress bar for values (Range 25 - 80) NB: Only works for positive numbers</p>
-                <div class="number"></div>
-                <button data-value="25">Set to 25</button>
-                <button data-value="50">Set to 50</button>
-                <button data-value="75">Set to 75</button>
-                <br /><br />
-                <div class="selector-code-collapse">
-                    <button>Toggle Code Display</button>
+            <div class="container wrapper" id="container-5">
+                <h3>Progressbar</h3>
+                <div class="well">
+                    <p>A progress bar for precentages (Range 0 - 100)</p>
+                    <div class="percentage"></div>
+                    <p>A progress bar for values (Range 25 - 80) NB: Only works for positive numbers</p>
+                    <div class="number"></div>
+                    <button data-value="25">Set to 25</button>
+                    <button data-value="50">Set to 50</button>
+                    <button data-value="75">Set to 75</button>
+                    <br /><br />
+                    <div class="selector-code-collapse">
+                        <button>Toggle Code Display</button>
 <pre style="display: none;"><code class="html">&lt;div id="container"&gt;
     &lt;div class="percentage"&gt;&lt;/div&gt;
     &lt;div class="number"&gt;&lt;/div&gt;
@@ -464,19 +480,19 @@ $("#container .password").labeledInput(
 $("#container div.percentage").bs_progress({ valuenow: 50 });
 $("#container div.number").bs_progress({ valuenow: 75, valuemin: 25, valuemax: 80 });
 </code></pre>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- breadcrumbs -->
+            <!-- breadcrumbs -->
 
-        <div class="container wrapper" id="container-6">
-            <h3>Breadcrumbs</h3>
-            <div class="well">
-                <p>Breadcrumb trail of where the page is</p>
-                <div class="trail"></div>
-                <div class="selector-code-collapse">
-                    <button>Toggle Code Display</button>
+            <div class="container wrapper" id="container-6">
+                <h3>Breadcrumbs</h3>
+                <div class="well">
+                    <p>Breadcrumb trail of where the page is</p>
+                    <div class="trail"></div>
+                    <div class="selector-code-collapse">
+                        <button>Toggle Code Display</button>
 <pre style="display: none;"><code class="html">&lt;div id="container"&gt;
     &lt;div&gt;&lt;/div&gt;
 &lt;/div&gt;
@@ -489,22 +505,22 @@ $("#container div.number").bs_progress({ valuenow: 75, valuemin: 25, valuemax: 8
     ]
 });
 </code></pre>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- tables -->
+            <!-- tables -->
 
-        <div class="container wrapper" id="container-7">
-            <h3>Tables</h3>
-            <div class="well">
-                <p>Simple formatting for table data, sortable by clicking on column headers</p>
-                <div>
-                    <table></table>
-                    <div class="feedback">Data from clicked rows will be displayed here</div>
-                </div>
-                <div class="selector-code-collapse">
-                    <button>Toggle Code Display</button>
+            <div class="container wrapper" id="container-7">
+                <h3>Tables</h3>
+                <div class="well">
+                    <p>Simple formatting for table data, sortable by clicking on column headers</p>
+                    <div>
+                        <table></table>
+                        <div class="feedback">Data from clicked rows will be displayed here</div>
+                    </div>
+                    <div class="selector-code-collapse">
+                        <button>Toggle Code Display</button>
 <pre style="display: none;"><code class="html">&lt;div id="container"&gt;
     &lt;table&gt;&lt;/table&gt;
 &lt;/div&gt;
@@ -527,23 +543,23 @@ $("#container div.number").bs_progress({ valuenow: 75, valuemin: 25, valuemax: 8
     }
 });
 </code></pre>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- notifications / alerts -->
+            <!-- notifications / alerts -->
 
-        <div class="container wrapper" id="container-8">
-            <h3>Alerts</h3>
-            <div class="well">
-                <p>Positionable information / alert messages</p>
-                <div>
-                    <button class="selector-alert" data-position="fixed-bottom" data-type="danger">Show Bottom Danger</button>
-                    <button class="selector-alert" data-position="fixed-top" data-type="info">Show Top Info</button>
-                    <br /><br />
-                </div>
-                <div class="selector-code-collapse">
-                    <button>Toggle Code Display</button>
+            <div class="container wrapper" id="container-8">
+                <h3>Alerts</h3>
+                <div class="well">
+                    <p>Positionable information / alert messages</p>
+                    <div>
+                        <button class="selector-alert" data-position="fixed-bottom" data-type="danger">Show Bottom Danger</button>
+                        <button class="selector-alert" data-position="fixed-top" data-type="info">Show Top Info</button>
+                        <br /><br />
+                    </div>
+                    <div class="selector-code-collapse">
+                        <button>Toggle Code Display</button>
 <pre style="display: none;"><code class="html">&lt;div id="container"&gt;
     &lt;button class="selector-alert" data-position="fixed-bottom" data-type="danger"&gt;Show Bottom Danger&lt;/button&gt;
     &lt;button class="selector-alert" data-position="fixed-top" data-type="info"&gt;Show Top Info&lt;/button&gt;
@@ -559,13 +575,13 @@ $("#container div.number").bs_progress({ valuenow: 75, valuemin: 25, valuemax: 8
         });
     });
 </code></pre>
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- padding at the bottom -->
+            <!-- padding at the bottom -->
 
 
-        <div style="height: 50px;"></div>
+            <div style="height: 50px;"></div>
 
 </body>
 </html>

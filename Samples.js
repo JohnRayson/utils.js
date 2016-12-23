@@ -6,6 +6,9 @@
         document.location = "https://github.com/JohnRayson/utils.js";
     });
 
+    // righthand menu
+    $("#right_menu").toc();
+
     // highlight the code
     $('pre code').each(function (i, block)
     {
