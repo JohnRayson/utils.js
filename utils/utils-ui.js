@@ -194,8 +194,8 @@
 							  .data("callback",group.elements[j].data)
 						);
 					}
-					$nav.append($ul);
-				})(settings.groups[i],$("#" + id))
+					$nav.find("#" + id).append($ul);
+				})(settings.groups[i],$this)
 			}
 		});
     }
